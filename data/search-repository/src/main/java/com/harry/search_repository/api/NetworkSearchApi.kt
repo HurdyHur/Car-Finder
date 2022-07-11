@@ -26,9 +26,9 @@ class NetworkSearchApi : SearchApi {
                 }
             }.body()
 
-            val decodedResponse = Json.decodeFromString<List<VehicleListing>>(response)
+            val decodedResponse = Json.decodeFromString<SearchResult.Success>(response)
             client.close()
-            SearchResult.Success(decodedResponse)
+            decodedResponse
         } catch (e: Exception) {
             client.close()
             SearchResult.Failure(e)

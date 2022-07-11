@@ -1,5 +1,6 @@
 import com.harry.search_repository.SearchRepository
 import com.harry.search_repository.SearchRepositoryImpl
+import com.harry.search_repository.api.NetworkSearchApi
 import com.harry.search_repository.api.SearchApi
 import com.harry.search_repository.model.SearchResult
 import io.mockk.coEvery
