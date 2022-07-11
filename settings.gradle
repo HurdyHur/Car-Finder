@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "Car Finder"
 include ':app'
 include ':data:make-and-model-repository'
+include ':data:search-repository'
