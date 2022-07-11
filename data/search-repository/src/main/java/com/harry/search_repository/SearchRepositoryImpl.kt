@@ -6,5 +6,4 @@ internal class SearchRepositoryImpl: SearchRepository {
     override suspend fun searchVehicles(make: String, model: String, year: String): SearchResult {
         TODO("Not yet implemented")
     }
-
 }
