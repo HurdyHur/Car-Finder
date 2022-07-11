@@ -6,4 +6,6 @@ interface MakeAndModelRepository {
 
     fun getMakes(): List<Make>
 
+    // In real implementation I would use an ID in place of model
+    fun getYearsByModel(model: String): List<String>
 }

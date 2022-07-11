@@ -15,6 +15,10 @@ class SearchUseCaseImpl(
         return makeAndModelRepository.getMakes().map { VehicleMake.fromMake(it) }
     }
 
+    override fun getYearsByModel(model: String): List<String> {
+        return makeAndModelRepository.getYearsByModel(model)
+    }
+
     override suspend fun searchVehicles(make: String, model: String, year: String): SearchResult {
         return searchRepository.searchVehicles(make, model, year).toSearchResult()
     }

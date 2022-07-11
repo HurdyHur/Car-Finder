@@ -75,4 +75,28 @@ internal class MakeAndModelRepositoryImpl : MakeAndModelRepository {
             Make(name = name, models = listOf("model 1", "model 2", "model 3", "model 4"))
         }
     }
+
+    // Mock information, could fetch this info from api
+    override fun getYearsByModel(model: String): List<String> {
+        return listOf(
+            "2022",
+            "2021",
+            "2020",
+            "2019",
+            "2018",
+            "2017",
+            "2016",
+            "2015",
+            "2014",
+            "2013",
+            "2012",
+            "2011",
+            "2010",
+            "2009",
+            "2008",
+            "2007",
+            "2006",
+            "2005"
+        )
+    }
 }
