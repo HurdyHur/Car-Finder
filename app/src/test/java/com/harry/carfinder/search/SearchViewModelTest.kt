@@ -2,7 +2,11 @@ package com.harry.carfinder.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.harry.carfinder.Search.SearchViewModel
+import com.harry.carfinder.Search.model.SearchResultUi
+import com.harry.carfinder.utils.MainCoroutineRule
 import com.harry.search_usecase.SearchUseCase
+import com.harry.search_usecase.model.SearchResult
+import com.harry.search_usecase.model.VehicleListing
 import com.harry.search_usecase.model.VehicleMake
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,6 +22,10 @@ class SearchViewModelTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     private val searchUseCase: SearchUseCase = mockk()
     private val viewModel = SearchViewModel(searchUseCase)
@@ -70,6 +78,59 @@ class SearchViewModelTest {
         coVerify { searchUseCase.getYearsByModel(expectedModel) }
 
         Assert.assertEquals(expectedYears, viewModel.searchYearsList.value)
+    }
+
+    @Test
+    fun `test search posts loading state while retrieving results`() {
+        runTest {
+            viewModel.search("make", "model", "2000")
+        }
+
+        Assert.assertEquals(SearchResultUi.Loading, viewModel.searchResults.value)
+    }
+
+    @Test
+    fun `test search posts failure state`() {
+        coEvery { searchUseCase.searchVehicles(any(), any(), any()) } returns SearchResult.Failure(IllegalStateException())
+
+        runTest {
+            viewModel.search("make", "model", "2000")
+        }
+
+        Assert.assertEquals(SearchResultUi.Failure, viewModel.searchResults.value)
+    }
+
+
+    @Test
+    fun `test search retrieves successful results and posts them`() {
+        val make = "make"
+        val model = "model"
+        val year = "2000"
+
+        val vehicleListing = VehicleListing(
+            id = "id",
+            name = "name",
+            title = "title",
+            make = "make",
+            model = "model",
+            year = "year",
+            price = "price"
+        )
+
+        val searchResult =
+            SearchResult.Success(listOf(vehicleListing, vehicleListing, vehicleListing))
+
+        val expectedResult = SearchResultUi.Success(searchResult.searchResults)
+
+        coEvery { searchUseCase.searchVehicles(make, model, year) } returns searchResult
+
+        runTest {
+            viewModel.search(make, model, year)
+        }
+
+        coVerify { searchUseCase.searchVehicles(make, model, year) }
+
+        Assert.assertEquals(expectedResult, viewModel.searchResults.value)
     }
 
 }
