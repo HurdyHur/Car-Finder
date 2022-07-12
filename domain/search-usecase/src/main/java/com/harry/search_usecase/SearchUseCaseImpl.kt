@@ -6,7 +6,7 @@ import com.harry.search_usecase.model.SearchResult
 import com.harry.search_usecase.model.VehicleMake
 import com.harry.search_usecase.model.mapper.toSearchResult
 
-class SearchUseCaseImpl(
+internal class SearchUseCaseImpl(
     private val makeAndModelRepository: MakeAndModelRepository,
     private val searchRepository: SearchRepository
 ) : SearchUseCase {
