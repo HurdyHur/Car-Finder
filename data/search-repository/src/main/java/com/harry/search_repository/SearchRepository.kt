@@ -6,4 +6,7 @@ interface SearchRepository {
 
     suspend fun searchVehicles(make: String, model: String, year: String): SearchResult
 
+    companion object {
+        fun create(): SearchRepository = SearchRepositoryImpl()
+    }
 }

@@ -10,11 +10,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.harry.carfinder.Search.SearchViewModel
 import com.harry.carfinder.ui.theme.CarFinderTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val viewModel: SearchViewModel by viewModel()
+
         setContent {
             CarFinderTheme {
                 // A surface container using the 'background' color from the theme

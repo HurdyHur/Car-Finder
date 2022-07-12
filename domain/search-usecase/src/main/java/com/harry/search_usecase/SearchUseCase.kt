@@ -11,4 +11,7 @@ interface SearchUseCase {
 
     suspend fun searchVehicles(make: String, model: String, year: String): SearchResult
 
+    companion object {
+        fun create(): SearchUseCase = SearchUseCaseImpl()
+    }
 }

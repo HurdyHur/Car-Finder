@@ -7,8 +7,8 @@ import com.harry.search_usecase.model.VehicleMake
 import com.harry.search_usecase.model.mapper.toSearchResult
 
 internal class SearchUseCaseImpl(
-    private val makeAndModelRepository: MakeAndModelRepository,
-    private val searchRepository: SearchRepository
+    private val makeAndModelRepository: MakeAndModelRepository = MakeAndModelRepository.create(),
+    private val searchRepository: SearchRepository = SearchRepository.create()
 ) : SearchUseCase {
 
     override fun getMakes(): List<VehicleMake> {
