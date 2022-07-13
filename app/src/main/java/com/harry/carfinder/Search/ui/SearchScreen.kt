@@ -9,6 +9,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,7 +19,14 @@ import com.harry.search_usecase.model.VehicleMake
 
 @Composable
 fun SearchScreen(makes: List<VehicleMake>, models: List<String>, dates: List<String>) {
-    SearchDropDowns(makes = makes, models = models, dates = dates)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column() {
+            SearchDropDowns(makes = makes, models = models, dates = dates)
+            SearchButton {
+
+            }
+        }
+    }
 }
 
 @Composable
@@ -50,6 +58,15 @@ fun DropDownList(@StringRes hintText: Int, items: List<String>) {
             }
         }
 
+}
+
+@Composable
+fun SearchButton(onClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Button(onClick = onClick, Modifier.fillMaxWidth(0.5f)) {
+            Text(text = stringResource(id = R.string.search_button))
+        }
+    }
 }
 
 @Preview(showBackground = true)

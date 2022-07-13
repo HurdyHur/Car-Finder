@@ -3,4 +3,5 @@
     <string name="drop_down_hint_make">Make</string>
     <string name="drop_down_hint_model">Model</string>
     <string name="drop_down_hint_year">Year</string>
+    <string name="search_button">Search</string>
 </resources>
