@@ -36,7 +36,7 @@ class SearchUserCaseTest {
     @Test
     fun `test getMakes fetches makes from repository and maps correctly`() {
         val repoMakes = listOf(Make("make name", listOf("model")))
-        val expectedMakes = listOf(VehicleMake("make name", listOf("model")))
+        val expectedMakes = listOf("make name")
 
         every { makeAndModelRepository.getMakes() } returns repoMakes
 
@@ -57,5 +57,17 @@ class SearchUserCaseTest {
 
         verify { makeAndModelRepository.getYearsByModel(expectedModel) }
         Assert.assertEquals(expectedYears, actual)
+    }
+
+    @Test
+    fun `test getModelsByMake returns expected models`() {
+        val expectedModels = listOf("model 1", "model 2")
+        val repoMakes = listOf(Make("make name", expectedModels))
+        every { makeAndModelRepository.getMakes() } returns repoMakes
+
+        val actual = searchUseCase.getModelsByMake("make name")
+
+        verify { makeAndModelRepository.getMakes() }
+        Assert.assertEquals(expectedModels, actual)
     }
 }
