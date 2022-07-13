@@ -15,6 +15,10 @@ internal class SearchUseCaseImpl(
         return makeAndModelRepository.getMakes().map { VehicleMake.fromMake(it) }
     }
 
+    override fun getModelsByMake(make: String): List<String> {
+        return makeAndModelRepository.getMakes().find { it.name == make }?.models ?: emptyList()
+    }
+
     override fun getYearsByModel(model: String): List<String> {
         return makeAndModelRepository.getYearsByModel(model)
     }

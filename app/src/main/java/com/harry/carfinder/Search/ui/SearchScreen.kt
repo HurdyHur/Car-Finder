@@ -1,6 +1,5 @@
 package com.harry.carfinder.Search.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -20,6 +19,9 @@ import com.harry.search_usecase.model.VehicleMake
 
 @Composable
 fun SearchScreen(
+    selectedMake: LiveData<String>,
+    selectedModel: LiveData<String>,
+    selectedYear: LiveData<String>,
     makes: LiveData<List<VehicleMake>>,
     models: LiveData<List<String>>,
     dates: LiveData<List<String>>,
@@ -31,6 +33,9 @@ fun SearchScreen(
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column {
             SearchDropDowns(
+                makesHintText = selectedMake.observeAsState().value,
+                modelsHintText = selectedModel.observeAsState().value,
+                yearsHintText = selectedYear.observeAsState().value,
                 makes = makes.observeAsState().value,
                 models = models.observeAsState().value,
                 dates = dates.observeAsState().value,
@@ -45,6 +50,9 @@ fun SearchScreen(
 
 @Composable
 fun SearchDropDowns(
+    makesHintText: String?,
+    modelsHintText: String?,
+    yearsHintText: String?,
     makes: List<VehicleMake>?,
     models: List<String>?,
     dates: List<String>?,
@@ -53,27 +61,35 @@ fun SearchDropDowns(
     onYearSelected: (String) -> Unit
 ) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        DropDownList(hintText = R.string.drop_down_hint_make, items = makes?.map { it.name }, onMakeSelected)
+        DropDownList(
+            hintText = makesHintText ?: stringResource(id = R.string.drop_down_hint_make),
+            items = makes?.map { it.name },
+            onMakeSelected
+        )
 
-        DropDownList(hintText = R.string.drop_down_hint_model, items = models, onModelSelected)
+        DropDownList(
+            hintText = modelsHintText ?: stringResource(id = R.string.drop_down_hint_model),
+            items = models,
+            onModelSelected
+        )
 
-        DropDownList(hintText = R.string.drop_down_hint_year, items = dates, onYearSelected)
+        DropDownList(
+            hintText = yearsHintText ?: stringResource(id = R.string.drop_down_hint_year),
+            items = dates,
+            onYearSelected
+        )
     }
 }
 
 @Composable
-fun DropDownList(@StringRes hintText: Int, items: List<String>?, onClick: (item: String) -> Unit) {
+fun DropDownList(hintText: String, items: List<String>?, onClick: (item: String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-
-    var text by remember {
-        mutableStateOf<String?>(null)
-    }
 
     Box(modifier = Modifier.padding(8.dp)) {
         Button(
             enabled = !items.isNullOrEmpty(),
             onClick = { expanded = true }) {
-            Text(text ?: stringResource(id = hintText))
+            Text(hintText)
         }
         DropdownMenu(
             expanded = expanded,
@@ -83,7 +99,6 @@ fun DropDownList(@StringRes hintText: Int, items: List<String>?, onClick: (item:
             items?.forEach { item ->
                 DropdownMenuItem(text = { Text(item) }, onClick = {
                     expanded = false
-                    text = item
                     onClick(item)
                 })
             }

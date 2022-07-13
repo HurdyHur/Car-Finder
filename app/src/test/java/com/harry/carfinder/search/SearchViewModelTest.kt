@@ -63,14 +63,17 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `test on make selected posts years available for model`() {
-        val make = VehicleMake("name", listOf("model 1", "model 2", "model 3"))
+    fun `test on make selected posts models available for make`() {
+        val make = "make"
+        val expectedModels = listOf("model 1", "model 2")
+
+        every { searchUseCase.getModelsByMake(make) } returns expectedModels
 
         runTest {
             viewModel.onMakeSelected(make)
         }
 
-        Assert.assertEquals(make.models, viewModel.models.value)
+        Assert.assertEquals(expectedModels, viewModel.models.value)
     }
 
     @Test
@@ -95,8 +98,9 @@ class SearchViewModelTest {
 
     @Test
     fun `test search posts loading state while retrieving results`() {
+
         runTest {
-            viewModel.search("make", "model", "2000")
+            viewModel.search()
         }
 
         Assert.assertEquals(SearchResultUi.Loading, viewModel.searchResults.value)
@@ -107,7 +111,7 @@ class SearchViewModelTest {
         coEvery { searchUseCase.searchVehicles(any(), any(), any()) } returns SearchResult.Failure(IllegalStateException())
 
         runTest {
-            viewModel.search("make", "model", "2000")
+            viewModel.search()
         }
 
         Assert.assertEquals(SearchResultUi.Failure, viewModel.searchResults.value)
@@ -135,10 +139,17 @@ class SearchViewModelTest {
 
         val expectedResult = SearchResultUi.Success(searchResult.searchResults)
 
+        every { searchUseCase.getModelsByMake(make) } returns emptyList()
+        every { searchUseCase.getYearsByModel(model) } returns emptyList()
+
         coEvery { searchUseCase.searchVehicles(make, model, year) } returns searchResult
 
         runTest {
-            viewModel.search(make, model, year)
+            viewModel.onMakeSelected(make)
+            viewModel.onModelSelected(model)
+            viewModel.onYearSelected(year)
+
+            viewModel.search()
         }
 
         coVerify { searchUseCase.searchVehicles(make, model, year) }

@@ -7,6 +7,8 @@ interface SearchUseCase {
 
     fun getMakes(): List<VehicleMake>
 
+    fun getModelsByMake(make: String): List<String>
+
     fun getYearsByModel(model: String): List<String>
 
     suspend fun searchVehicles(make: String, model: String, year: String): SearchResult

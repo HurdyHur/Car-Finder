@@ -29,6 +29,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SearchScreen(
+                        selectedMake = viewModel.selectedMake,
+                        selectedModel = viewModel.selectedModel,
+                        selectedYear = viewModel.selectedYear,
                         makes = viewModel.makes,
                         models = viewModel.models,
                         dates = viewModel.years,

@@ -16,11 +16,13 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
     private val modelsSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val yearsSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val searchResultSubject: MutableLiveData<SearchResultUi> = MutableLiveData()
+    private val selectedMakeSubject: MutableLiveData<String> = MutableLiveData()
+    private val selectedModelSubject: MutableLiveData<String> = MutableLiveData()
+    private val selectedYearSubject: MutableLiveData<String> = MutableLiveData()
 
-    private val selectedMake: MutableLiveData<String> = MutableLiveData()
-    private val selectedModel: MutableLiveData<String> = MutableLiveData()
-    private val selectedYear: MutableLiveData<String> = MutableLiveData()
-
+    val selectedMake: MutableLiveData<String> = selectedMakeSubject
+    val selectedModel: MutableLiveData<String> = selectedModelSubject
+    val selectedYear: MutableLiveData<String> = selectedYearSubject
     val makes: LiveData<List<VehicleMake>> = makesSubject
     val models: LiveData<List<String>> = modelsSubject
     val years: LiveData<List<String>> = yearsSubject
@@ -32,23 +34,23 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
         yearsSubject.postValue(emptyList())
     }
 
-    fun onMakeSelected(make: VehicleMake) {
+    fun onMakeSelected(make: String) {
         clearModelSelection()
         clearYearsSelection()
 
-        selectedMake.postValue(make.name)
-        modelsSubject.postValue(make.models)
+        selectedMakeSubject.postValue(make)
+        modelsSubject.postValue(searchUseCase.getModelsByMake(make))
     }
 
     fun onModelSelected(model: String) {
         clearYearsSelection()
 
-        selectedModel.postValue(model)
+        selectedModelSubject.postValue(model)
         yearsSubject.postValue(searchUseCase.getYearsByModel(model))
     }
 
     fun onYearSelected(year: String) {
-        selectedYear.postValue(year)
+        selectedYearSubject.postValue(year)
     }
 
     fun search() {
@@ -67,12 +69,12 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
     }
 
     private fun clearYearsSelection() {
-        selectedYear.postValue("")
+        selectedYearSubject.postValue(null)
         yearsSubject.postValue(emptyList())
     }
 
     private fun clearModelSelection() {
-        selectedModel.postValue("")
+        selectedModelSubject.postValue(null)
         modelsSubject.postValue(emptyList())
     }
 
