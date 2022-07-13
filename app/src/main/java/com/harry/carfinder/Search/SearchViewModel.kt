@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
 
-    private val makesSubject: MutableLiveData<List<VehicleMake>> = MutableLiveData()
+    private val makesSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val modelsSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val yearsSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val searchResultSubject: MutableLiveData<SearchResultUi> = MutableLiveData()
@@ -20,13 +20,13 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
     private val selectedModelSubject: MutableLiveData<String> = MutableLiveData()
     private val selectedYearSubject: MutableLiveData<String> = MutableLiveData()
 
-    val selectedMake: MutableLiveData<String> = selectedMakeSubject
-    val selectedModel: MutableLiveData<String> = selectedModelSubject
-    val selectedYear: MutableLiveData<String> = selectedYearSubject
-    val makes: LiveData<List<VehicleMake>> = makesSubject
+    val makes: LiveData<List<String>> = makesSubject
     val models: LiveData<List<String>> = modelsSubject
     val years: LiveData<List<String>> = yearsSubject
     val searchResults: LiveData<SearchResultUi> = searchResultSubject
+    val selectedMake: MutableLiveData<String> = selectedMakeSubject
+    val selectedModel: MutableLiveData<String> = selectedModelSubject
+    val selectedYear: MutableLiveData<String> = selectedYearSubject
 
     fun getMakes() {
         makesSubject.postValue(searchUseCase.getMakes())

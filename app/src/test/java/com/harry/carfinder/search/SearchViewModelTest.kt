@@ -7,7 +7,6 @@ import com.harry.carfinder.utils.MainCoroutineRule
 import com.harry.search_usecase.SearchUseCase
 import com.harry.search_usecase.model.SearchResult
 import com.harry.search_usecase.model.VehicleListing
-import com.harry.search_usecase.model.VehicleMake
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -45,11 +44,7 @@ class SearchViewModelTest {
 
     @Test
     fun `test getMakes calls use case and posts results`() {
-        val expectedMakes = listOf<VehicleMake>(
-            VehicleMake("name 1", emptyList()),
-            VehicleMake("name 2", emptyList()),
-            VehicleMake("name 3", emptyList())
-        )
+        val expectedMakes = listOf("name 1", "name 2", "name 3")
 
         coEvery { searchUseCase.getMakes() } returns expectedMakes
 
@@ -159,7 +154,7 @@ class SearchViewModelTest {
 
     private fun populateQueryParams() {
         val models = listOf("model")
-        val expectedMakes = listOf(VehicleMake("name 1", models))
+        val expectedMakes = listOf("name 1")
         coEvery { searchUseCase.getMakes() } returns expectedMakes
         every { searchUseCase.getYearsByModel(any()) } returns listOf("2001, 2002")
 

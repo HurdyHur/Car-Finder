@@ -22,7 +22,7 @@ fun SearchScreen(
     selectedMake: LiveData<String>,
     selectedModel: LiveData<String>,
     selectedYear: LiveData<String>,
-    makes: LiveData<List<VehicleMake>>,
+    makes: LiveData<List<String>>,
     models: LiveData<List<String>>,
     dates: LiveData<List<String>>,
     onSearch: () -> Unit,
@@ -53,7 +53,7 @@ fun SearchDropDowns(
     makesHintText: String?,
     modelsHintText: String?,
     yearsHintText: String?,
-    makes: List<VehicleMake>?,
+    makes: List<String>?,
     models: List<String>?,
     dates: List<String>?,
     onMakeSelected: (String) -> Unit,
@@ -63,7 +63,7 @@ fun SearchDropDowns(
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         DropDownList(
             hintText = makesHintText ?: stringResource(id = R.string.drop_down_hint_make),
-            items = makes?.map { it.name },
+            items = makes,
             onMakeSelected
         )
 

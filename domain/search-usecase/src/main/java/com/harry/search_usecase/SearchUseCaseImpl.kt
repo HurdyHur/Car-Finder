@@ -11,8 +11,8 @@ internal class SearchUseCaseImpl(
     private val searchRepository: SearchRepository = SearchRepository.create()
 ) : SearchUseCase {
 
-    override fun getMakes(): List<VehicleMake> {
-        return makeAndModelRepository.getMakes().map { VehicleMake.fromMake(it) }
+    override fun getMakes(): List<String> {
+        return makeAndModelRepository.getMakes().map { it.name }
     }
 
     override fun getModelsByMake(make: String): List<String> {

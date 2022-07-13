@@ -5,7 +5,7 @@ import com.harry.search_usecase.model.VehicleMake
 
 interface SearchUseCase {
 
-    fun getMakes(): List<VehicleMake>
+    fun getMakes(): List<String>
 
     fun getModelsByMake(make: String): List<String>
 
