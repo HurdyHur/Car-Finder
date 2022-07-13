@@ -13,51 +13,55 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.harry.carfinder.R
 import com.harry.carfinder.ui.theme.CarFinderTheme
 import com.harry.search_usecase.model.VehicleMake
 
 @Composable
-fun SearchScreen(makes: List<VehicleMake>, models: List<String>, dates: List<String>) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column() {
+fun SearchScreen(makes: List<VehicleMake>, models: List<String>, dates: List<String>, onSearch: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column {
             SearchDropDowns(makes = makes, models = models, dates = dates)
-            SearchButton {
-
-            }
+            SearchButton { onSearch }
         }
     }
 }
 
 @Composable
 fun SearchDropDowns(makes: List<VehicleMake>, models: List<String>, dates: List<String>) {
-    Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceEvenly) {
-        Box {
-            DropDownList(hintText = R.string.drop_down_hint_make, items = makes.map { it.name })
-        }
-        Box {
-            DropDownList(hintText = R.string.drop_down_hint_model, items = models)
-        }
-        Box {
-            DropDownList(hintText = R.string.drop_down_hint_year, items = dates)
-        }
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        DropDownList(hintText = R.string.drop_down_hint_make, items = makes.map { it.name })
+
+        DropDownList(hintText = R.string.drop_down_hint_model, items = models)
+
+        DropDownList(hintText = R.string.drop_down_hint_year, items = dates)
     }
 }
 
 @Composable
 fun DropDownList(@StringRes hintText: Int, items: List<String>) {
     var expanded by remember { mutableStateOf(false) }
-        Box {
-            Button(onClick = { expanded = true }) {
-                Text(stringResource(id = hintText))
-            }
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }, modifier = Modifier.fillMaxSize()) {
-                items.forEach {
-                    DropdownMenuItem(text = { Text(it) }, onClick = { expanded = false })
-                }
+    var text by remember {
+        mutableStateOf<String?>(null)
+    }
+    Box(modifier = Modifier.padding(8.dp)) {
+        Button(onClick = { expanded = true }) {
+            Text(text ?: stringResource(id = hintText))
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items.forEach {
+                DropdownMenuItem(text = { Text(it) }, onClick = {
+                    expanded = false
+                    text = it
+                })
             }
         }
-
+    }
 }
 
 @Composable
@@ -84,6 +88,6 @@ fun DefaultPreview() {
 
         val dates = listOf("2000", "2001", "2002")
 
-        SearchScreen(makes = makes, models = models, dates = dates)
+        SearchScreen(makes = makes, models = models, dates = dates) { }
     }
 }
