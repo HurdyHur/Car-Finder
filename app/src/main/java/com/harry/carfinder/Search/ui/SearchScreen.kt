@@ -7,38 +7,62 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import com.harry.carfinder.R
 import com.harry.carfinder.ui.theme.CarFinderTheme
 import com.harry.search_usecase.model.VehicleMake
 
 @Composable
-fun SearchScreen(makes: List<VehicleMake>?, models: List<String>?, dates: List<String>?, onSearch: () -> Unit) {
+fun SearchScreen(
+    makes: LiveData<List<VehicleMake>>,
+    models: LiveData<List<String>>,
+    dates: LiveData<List<String>>,
+    onSearch: () -> Unit,
+    onMakeSelected: (String) -> Unit,
+    onModelSelected: (String) -> Unit,
+    onYearSelected: (String) -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column {
-            SearchDropDowns(makes = makes, models = models, dates = dates)
+            SearchDropDowns(
+                makes = makes.observeAsState().value,
+                models = models.observeAsState().value,
+                dates = dates.observeAsState().value,
+                onMakeSelected,
+                onModelSelected,
+                onYearSelected
+            )
             SearchButton { onSearch }
         }
     }
 }
 
 @Composable
-fun SearchDropDowns(makes: List<VehicleMake>?, models: List<String>?, dates: List<String>?) {
+fun SearchDropDowns(
+    makes: List<VehicleMake>?,
+    models: List<String>?,
+    dates: List<String>?,
+    onMakeSelected: (String) -> Unit,
+    onModelSelected: (String) -> Unit,
+    onYearSelected: (String) -> Unit
+) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        DropDownList(hintText = R.string.drop_down_hint_make, items = makes?.map { it.name })
+        DropDownList(hintText = R.string.drop_down_hint_make, items = makes?.map { it.name }, onMakeSelected)
 
-        DropDownList(hintText = R.string.drop_down_hint_model, items = models)
+        DropDownList(hintText = R.string.drop_down_hint_model, items = models, onModelSelected)
 
-        DropDownList(hintText = R.string.drop_down_hint_year, items = dates)
+        DropDownList(hintText = R.string.drop_down_hint_year, items = dates, onYearSelected)
     }
 }
 
 @Composable
-fun DropDownList(@StringRes hintText: Int, items: List<String>?) {
+fun DropDownList(@StringRes hintText: Int, items: List<String>?, onClick: (item: String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     var text by remember {
@@ -56,10 +80,11 @@ fun DropDownList(@StringRes hintText: Int, items: List<String>?) {
             onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxSize()
         ) {
-            items?.forEach {
-                DropdownMenuItem(text = { Text(it) }, onClick = {
+            items?.forEach { item ->
+                DropdownMenuItem(text = { Text(item) }, onClick = {
                     expanded = false
-                    text = it
+                    text = item
+                    onClick(item)
                 })
             }
         }
@@ -90,6 +115,6 @@ fun DefaultPreview() {
 
         val dates = listOf("2000", "2001", "2002")
 
-        SearchScreen(makes = makes, models = emptyList(), dates = dates) { }
+        //SearchScreen(makes = makes, models = emptyList(), dates = dates) { }
     }
 }
