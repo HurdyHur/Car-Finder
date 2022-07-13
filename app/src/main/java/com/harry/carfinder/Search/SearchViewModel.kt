@@ -12,26 +12,29 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchUseCase: SearchUseCase): ViewModel() {
 
-    private val searchMakesListSubject: MutableLiveData<List<VehicleMake>> = MutableLiveData()
-    private val searchModelsListSubject: MutableLiveData<List<String>> = MutableLiveData()
-    private val searchYearsListSubject: MutableLiveData<List<String>> = MutableLiveData()
+    private val makesSubject: MutableLiveData<List<VehicleMake>> = MutableLiveData()
+    private val modelsSubject: MutableLiveData<List<String>> = MutableLiveData()
+    private val yearsSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val searchResultSubject: MutableLiveData<SearchResultUi> = MutableLiveData()
 
-    val searchMakesList: LiveData<List<VehicleMake>> = searchMakesListSubject
-    val searchModelsList: LiveData<List<String>> = searchModelsListSubject
-    val searchYearsList: LiveData<List<String>> = searchYearsListSubject
+    val makes: LiveData<List<VehicleMake>> = makesSubject
+    val models: LiveData<List<String>> = modelsSubject
+    val years: LiveData<List<String>> = yearsSubject
     val searchResults: LiveData<SearchResultUi> = searchResultSubject
 
     fun getMakes() {
-        searchMakesListSubject.postValue(searchUseCase.getMakes())
+        makesSubject.postValue(searchUseCase.getMakes())
+        modelsSubject.postValue(emptyList())
+        yearsSubject.postValue(emptyList())
     }
 
     fun onMakeSelected(make: VehicleMake) {
-        searchModelsListSubject.postValue(make.models)
+        modelsSubject.postValue(make.models)
+        yearsSubject.postValue(emptyList())
     }
 
     fun onModelSelected(model: String) {
-        searchYearsListSubject.postValue(searchUseCase.getYearsByModel(model))
+        yearsSubject.postValue(searchUseCase.getYearsByModel(model))
     }
 
     fun search(make: String, model: String, year: String) {

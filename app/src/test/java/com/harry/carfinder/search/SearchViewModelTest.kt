@@ -10,6 +10,7 @@ import com.harry.search_usecase.model.VehicleListing
 import com.harry.search_usecase.model.VehicleMake
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -31,6 +32,18 @@ class SearchViewModelTest {
     private val viewModel = SearchViewModel(searchUseCase)
 
     @Test
+    fun `test getMakes clears other search parameters`() {
+        populateQueryParams()
+
+        runTest {
+            viewModel.getMakes()
+        }
+
+        Assert.assertEquals(viewModel.years.value, emptyList<String>())
+        Assert.assertEquals(viewModel.models.value, emptyList<String>())
+    }
+
+    @Test
     fun `test getMakes calls use case and posts results`() {
         val expectedMakes = listOf<VehicleMake>(
             VehicleMake("name 1", emptyList()),
@@ -46,7 +59,7 @@ class SearchViewModelTest {
 
         coVerify { searchUseCase.getMakes() }
 
-        Assert.assertEquals(expectedMakes, viewModel.searchMakesList.value)
+        Assert.assertEquals(expectedMakes, viewModel.makes.value)
     }
 
     @Test
@@ -57,7 +70,7 @@ class SearchViewModelTest {
             viewModel.onMakeSelected(make)
         }
 
-        Assert.assertEquals(make.models, viewModel.searchModelsList.value)
+        Assert.assertEquals(make.models, viewModel.models.value)
     }
 
     @Test
@@ -77,7 +90,7 @@ class SearchViewModelTest {
 
         coVerify { searchUseCase.getYearsByModel(expectedModel) }
 
-        Assert.assertEquals(expectedYears, viewModel.searchYearsList.value)
+        Assert.assertEquals(expectedYears, viewModel.years.value)
     }
 
     @Test
@@ -131,6 +144,19 @@ class SearchViewModelTest {
         coVerify { searchUseCase.searchVehicles(make, model, year) }
 
         Assert.assertEquals(expectedResult, viewModel.searchResults.value)
+    }
+
+    private fun populateQueryParams() {
+        val models = listOf("model")
+        val expectedMakes = listOf(VehicleMake("name 1", models))
+        coEvery { searchUseCase.getMakes() } returns expectedMakes
+        every { searchUseCase.getYearsByModel(any()) } returns listOf("2001, 2002")
+
+        runTest {
+            viewModel.getMakes()
+            viewModel.onModelSelected(models.first())
+            viewModel.years
+        }
     }
 
 }

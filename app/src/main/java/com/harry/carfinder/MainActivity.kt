@@ -30,9 +30,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SearchScreen(
-                        makes = viewModel.searchMakesList.observeAsState().value,
-                        models = viewModel.searchModelsList.observeAsState().value,
-                        dates = viewModel.searchYearsList.observeAsState().value) {
+                        makes = viewModel.makes.observeAsState().value,
+                        models = viewModel.models.observeAsState().value,
+                        dates = viewModel.years.observeAsState().value) {
                     }
                 }
             }
