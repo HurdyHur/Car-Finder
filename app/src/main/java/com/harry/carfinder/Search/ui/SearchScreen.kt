@@ -2,8 +2,6 @@ package com.harry.carfinder.Search.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -19,7 +17,7 @@ import com.harry.carfinder.ui.theme.CarFinderTheme
 import com.harry.search_usecase.model.VehicleMake
 
 @Composable
-fun SearchScreen(makes: List<VehicleMake>, models: List<String>, dates: List<String>, onSearch: () -> Unit) {
+fun SearchScreen(makes: List<VehicleMake>?, models: List<String>?, dates: List<String>?, onSearch: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column {
             SearchDropDowns(makes = makes, models = models, dates = dates)
@@ -29,9 +27,9 @@ fun SearchScreen(makes: List<VehicleMake>, models: List<String>, dates: List<Str
 }
 
 @Composable
-fun SearchDropDowns(makes: List<VehicleMake>, models: List<String>, dates: List<String>) {
+fun SearchDropDowns(makes: List<VehicleMake>?, models: List<String>?, dates: List<String>?) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        DropDownList(hintText = R.string.drop_down_hint_make, items = makes.map { it.name })
+        DropDownList(hintText = R.string.drop_down_hint_make, items = makes?.map { it.name })
 
         DropDownList(hintText = R.string.drop_down_hint_model, items = models)
 
@@ -40,13 +38,17 @@ fun SearchDropDowns(makes: List<VehicleMake>, models: List<String>, dates: List<
 }
 
 @Composable
-fun DropDownList(@StringRes hintText: Int, items: List<String>) {
+fun DropDownList(@StringRes hintText: Int, items: List<String>?) {
     var expanded by remember { mutableStateOf(false) }
+
     var text by remember {
         mutableStateOf<String?>(null)
     }
+
     Box(modifier = Modifier.padding(8.dp)) {
-        Button(onClick = { expanded = true }) {
+        Button(
+            enabled = !items.isNullOrEmpty(),
+            onClick = { expanded = true }) {
             Text(text ?: stringResource(id = hintText))
         }
         DropdownMenu(
@@ -54,7 +56,7 @@ fun DropDownList(@StringRes hintText: Int, items: List<String>) {
             onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxSize()
         ) {
-            items.forEach {
+            items?.forEach {
                 DropdownMenuItem(text = { Text(it) }, onClick = {
                     expanded = false
                     text = it
@@ -88,6 +90,6 @@ fun DefaultPreview() {
 
         val dates = listOf("2000", "2001", "2002")
 
-        SearchScreen(makes = makes, models = models, dates = dates) { }
+        SearchScreen(makes = makes, models = emptyList(), dates = dates) { }
     }
 }
