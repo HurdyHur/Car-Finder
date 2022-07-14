@@ -10,7 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.harry.carfinder.Search.SearchViewModel
+import com.harry.carfinder.Search.ui.SearchQueryScreen
 import com.harry.carfinder.Search.ui.SearchScreen
 import com.harry.carfinder.ui.theme.CarFinderTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,24 +32,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SearchScreen(
-                        selectedMake = viewModel.selectedMake,
-                        selectedModel = viewModel.selectedModel,
-                        selectedYear = viewModel.selectedYear,
-                        makes = viewModel.makes,
-                        models = viewModel.models,
-                        dates = viewModel.years,
-                        onMakeSelected = { viewModel.onMakeSelected(it) },
-                        onModelSelected = { viewModel.onModelSelected(it) },
-                        onYearSelected = { viewModel.onYearSelected(it) },
-                        onSearch = { viewModel.search() })
-
+                    SearchScreen(viewModel = viewModel)
                     viewModel.getMakes()
                 }
             }
         }
     }
 }
+
+
 
 @Composable
 fun Greeting(name: String) {
