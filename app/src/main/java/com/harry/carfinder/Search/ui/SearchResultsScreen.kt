@@ -27,9 +27,7 @@ import com.harry.search_usecase.model.VehicleListing
 
 @Composable
 fun SearchResultsScreen(searchResultUi: LiveData<SearchResultUi>) {
-    val searchResults = searchResultUi.observeAsState().value
-
-    when (searchResults) {
+    when (val searchResults = searchResultUi.observeAsState().value) {
         is SearchResultUi.Success -> SearchResultsList(items = searchResults.searchResults)
         is SearchResultUi.Failure -> FailedView { }
         is SearchResultUi.Loading -> LoadingView()
@@ -54,9 +52,12 @@ fun ListingItem(listing: VehicleListing) {
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Text(listing.price, modifier = Modifier.padding(4.dp))
-        Text(listing.title, modifier = Modifier.padding(4.dp))
-        Text(listing.year, modifier = Modifier.padding(4.dp))
+        Text(listing.price, modifier = Modifier.padding(8.dp))
+        Text(listing.title, modifier = Modifier.padding(8.dp))
+        Text(
+            "${listing.make} ${listing.model} ${listing.year}",
+            modifier = Modifier.padding(8.dp)
+        )
     }
 }
 
@@ -86,7 +87,6 @@ fun FailedView(onRetryClicked: () -> Unit) {
         }
     }
 }
-
 
 @Composable
 fun LoadingView() {
