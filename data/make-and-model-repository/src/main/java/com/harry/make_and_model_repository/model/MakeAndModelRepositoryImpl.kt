@@ -2,14 +2,18 @@ package com.harry.make_and_model_repository.model
 
 import com.harry.make_and_model_repository.MakeAndModelRepository
 
+/**
+ * Mock Repository for retrieving makes and model information
+ *
+ * This would be swapped out later, probably would change
+ * to suspend functions depending on data source.
+ */
 internal class MakeAndModelRepositoryImpl : MakeAndModelRepository {
 
     // Mock information, could fetch this info from api
     override fun getMakes(): List<Make> {
         return listOf(
             "Abarth",
-            "Alfa Romeo",
-            "Aston Martin",
             "Audi",
             "Bentley",
             "BMW",
@@ -71,8 +75,12 @@ internal class MakeAndModelRepositoryImpl : MakeAndModelRepository {
             "Toyota",
             "Volkswagen",
             "Volvo"
-        ).map { name ->
-            Make(name = name, models = listOf("model 1", "model 2", "model 3", "model 4"))
+        ).mapIndexed { index, name ->
+            if (index % 2 == 0) {
+                Make(name = name, models = listOf("Broom", "Fastest", "Sandero", "Cooper"))
+            } else {
+                Make(name = name, models = listOf("X1", "Zebra", "Oxtail", "Panther"))
+            }
         }
     }
 
