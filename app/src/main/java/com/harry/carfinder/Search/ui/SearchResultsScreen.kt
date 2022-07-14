@@ -28,10 +28,10 @@ import com.harry.carfinder.ui.theme.CarFinderTheme
 import com.harry.search_usecase.model.VehicleListing
 
 @Composable
-fun SearchResultsScreen(searchResultUi: LiveData<SearchResultUi>) {
+fun SearchResultsScreen(searchResultUi: LiveData<SearchResultUi>, onRetry: () -> Unit) {
     when (val searchResults = searchResultUi.observeAsState().value) {
         is SearchResultUi.Success -> SearchResultsList(items = searchResults.searchResults)
-        is SearchResultUi.Failure -> FailedView { }
+        is SearchResultUi.Failure -> FailedView(onRetry)
         is SearchResultUi.Loading -> LoadingView()
     }
 }

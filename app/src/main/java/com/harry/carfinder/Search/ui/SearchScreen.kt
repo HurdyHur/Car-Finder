@@ -28,6 +28,10 @@ fun SearchScreen(viewModel: SearchViewModel) {
                 })
         }
 
-        composable("searchResultsScreen") { SearchResultsScreen(viewModel.searchResults) }
+        composable("searchResultsScreen") {
+            SearchResultsScreen(viewModel.searchResults) {
+                viewModel.search()
+            }
+        }
     }
 }
