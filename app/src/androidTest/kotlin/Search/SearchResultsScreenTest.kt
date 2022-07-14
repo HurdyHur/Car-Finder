@@ -49,7 +49,8 @@ class SearchResultsScreenTest {
                     make = "make $i",
                     model = "model $i",
                     year = "year $i",
-                    price = "price "
+                    price = "price $i",
+                    image = "image $i"
                 )
             )
         }
@@ -57,7 +58,7 @@ class SearchResultsScreenTest {
         results.postValue(SearchResultUi.Success(listings))
 
         for (i in 0..3) {
-            composeTestRule.onNodeWithText(listings[i].title).assertIsDisplayed()
+            composeTestRule.onNodeWithText(listings[i].name).assertIsDisplayed()
             composeTestRule.onNodeWithText(
                 "${listings[i].make} ${listings[i].model} ${listings[i].year}"
             ).assertIsDisplayed()

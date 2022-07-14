@@ -1,9 +1,6 @@
 package com.harry.carfinder.Search.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,14 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.LiveData
+import coil.compose.AsyncImage
 import com.harry.carfinder.R
 import com.harry.carfinder.Search.model.SearchResultUi
 import com.harry.carfinder.ui.theme.CarFinderTheme
@@ -52,12 +54,55 @@ fun ListingItem(listing: VehicleListing) {
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Text(listing.price, modifier = Modifier.padding(8.dp))
-        Text(listing.title, modifier = Modifier.padding(8.dp))
-        Text(
-            "${listing.make} ${listing.model} ${listing.year}",
-            modifier = Modifier.padding(8.dp)
-        )
+        ConstraintLayout(Modifier.padding(8.dp)) {
+            val (image, name, price, info) = createRefs()
+            AsyncImage(model = listing.image, contentDescription = listing.title,
+                modifier = Modifier
+                    .fillMaxWidth(0.4f)
+                    .padding(dimensionResource(id = R.dimen.default_padding))
+                    .constrainAs(image) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    })
+
+
+            Text(text = listing.name,
+                style = TextStyle(
+                    fontSize =
+                    dimensionResource(id = R.dimen.listing_item_title_text_size).value.sp
+                ),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(dimensionResource(id = R.dimen.default_padding))
+                    .constrainAs(name) {
+                        start.linkTo(image.end)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    })
+
+            Text(text = listing.price,
+                Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(dimensionResource(id = R.dimen.default_padding))
+                    .constrainAs(price) {
+                        start.linkTo(image.end)
+                        top.linkTo(name.bottom)
+                        end.linkTo(parent.end)
+                    })
+
+            Text(text = "${listing.make} ${listing.model} ${listing.year}",
+                Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(dimensionResource(id = R.dimen.default_padding))
+                    .constrainAs(info) {
+                        start.linkTo(image.end)
+                        top.linkTo(price.bottom)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    })
+        }
     }
 }
 
@@ -112,7 +157,7 @@ fun ResultsPreview() {
             model = "model",
             year = "year",
             price = "price",
-            image = "url"
+            image = "https://www.gpas-cache.ford.com/guid/d7afc86b-6ee3-332c-a23e-6df31812282b.png"
         )
 
         val searchResult = listOf(vehicleListing, vehicleListing, vehicleListing)
