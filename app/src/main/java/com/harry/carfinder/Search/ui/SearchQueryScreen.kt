@@ -1,22 +1,24 @@
 package com.harry.carfinder.Search.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import com.harry.carfinder.R
 import com.harry.carfinder.ui.theme.CarFinderTheme
-import com.harry.search_usecase.model.VehicleMake
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchQueryScreen(
     selectedMake: LiveData<String>,
@@ -30,22 +32,41 @@ fun SearchQueryScreen(
     onModelSelected: (String) -> Unit,
     onYearSelected: (String) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column {
-            SearchDropDowns(
-                makesHintText = selectedMake.observeAsState().value,
-                modelsHintText = selectedModel.observeAsState().value,
-                yearsHintText = selectedYear.observeAsState().value,
-                makes = makes.observeAsState().value,
-                models = models.observeAsState().value,
-                dates = dates.observeAsState().value,
-                onMakeSelected,
-                onModelSelected,
-                onYearSelected
-            )
-            SearchButton { onSearch() }
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {
+            Column {
+                QueryTitleView()
+
+                SearchDropDowns(
+                    makesHintText = selectedMake.observeAsState().value,
+                    modelsHintText = selectedModel.observeAsState().value,
+                    yearsHintText = selectedYear.observeAsState().value,
+                    makes = makes.observeAsState().value,
+                    models = models.observeAsState().value,
+                    dates = dates.observeAsState().value,
+                    onMakeSelected,
+                    onModelSelected,
+                    onYearSelected
+                )
+                SearchButton { onSearch() }
+            }
         }
     }
+}
+
+@Composable
+fun QueryTitleView() {
+    Text(
+        stringResource(id = R.string.search_query_title),
+        textAlign = TextAlign.Center,
+        fontSize = 28.sp,
+        modifier = Modifier.padding(8.dp)
+    )
 }
 
 @Composable
@@ -60,7 +81,8 @@ fun SearchDropDowns(
     onModelSelected: (String) -> Unit,
     onYearSelected: (String) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+    Column(Modifier.fillMaxWidth()) {
+
         DropDownList(
             hintText = makesHintText ?: stringResource(id = R.string.drop_down_hint_make),
             items = makes,
@@ -87,14 +109,16 @@ fun DropDownList(hintText: String, items: List<String>?, onClick: (item: String)
 
     Box(modifier = Modifier.padding(8.dp)) {
         Button(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
             enabled = !items.isNullOrEmpty(),
             onClick = { expanded = true }) {
-            Text(hintText)
+            Text(hintText, textAlign = TextAlign.Left, modifier = Modifier.fillMaxWidth())
         }
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.offset(y = 24.dp).fillMaxSize()
         ) {
             items?.forEach { item ->
                 DropdownMenuItem(text = { Text(item) }, onClick = {
@@ -108,28 +132,37 @@ fun DropDownList(hintText: String, items: List<String>?, onClick: (item: String)
 
 @Composable
 fun SearchButton(onClick: () -> Unit) {
+    val mainButtonColor = ButtonDefaults.buttonColors(
+        containerColor = Color.Red,
+        contentColor = Color.White
+    )
+
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        Button(onClick = onClick, Modifier.fillMaxWidth(0.5f)) {
-            Text(text = stringResource(id = R.string.search_button))
+        Button(onClick = onClick, Modifier.fillMaxWidth(0.5f), colors = mainButtonColor) {
+            Text(text = stringResource(id = R.string.search_button), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun SearchQueryPreview() {
     CarFinderTheme {
 
-        val makes = listOf<VehicleMake>(
-            VehicleMake("name 1", emptyList()),
-            VehicleMake("name 2", emptyList()),
-            VehicleMake("name 3", emptyList())
-        )
+        val makes = listOf("name 1", "name 2", "name 3")
 
         val models = listOf("model 1", "model 2", "model 3")
 
         val dates = listOf("2000", "2001", "2002")
 
-        //SearchScreen(makes = makes, models = emptyList(), dates = dates) { }
+        SearchDropDowns(makes = makes,
+            models = models,
+            dates = dates,
+            makesHintText = "Makes",
+            modelsHintText = "Models",
+            yearsHintText = "Years",
+            onModelSelected = {},
+            onMakeSelected = {},
+            onYearSelected = {})
     }
 }
