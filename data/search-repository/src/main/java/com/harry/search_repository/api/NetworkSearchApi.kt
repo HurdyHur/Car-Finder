@@ -26,7 +26,7 @@ class NetworkSearchApi : SearchApi {
                 }
             }.body()
 
-            val decodedResponse = Json.decodeFromString<SearchResult.Success>(response)
+            val decodedResponse = Json { ignoreUnknownKeys = true }.decodeFromString<SearchResult.Success>(response)
             client.close()
             decodedResponse
         } catch (e: Exception) {

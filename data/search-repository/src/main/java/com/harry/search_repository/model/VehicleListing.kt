@@ -10,5 +10,8 @@ data class VehicleListing(
     val make: String,
     val model: String,
     val year: String,
-    val price: String
+    val price: String,
+
+    // var and nullable to allow me to mock.
+    val image: String = "https://www.gpas-cache.ford.com/guid/d7afc86b-6ee3-332c-a23e-6df31812282b.png"
 )

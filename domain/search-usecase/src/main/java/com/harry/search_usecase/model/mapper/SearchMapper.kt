@@ -14,6 +14,6 @@ internal fun SearchResultRepositoryModel.toSearchResult(): SearchResult {
 }
 
 private fun VehicleListingRepositoryModel.toVehicleListing(): VehicleListing {
-    return VehicleListing(id, name, title, make, model, year, price)
+    return VehicleListing(id, name, title, make, model, year, price, image)
 }
 

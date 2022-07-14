@@ -111,7 +111,8 @@ fun ResultsPreview() {
             make = "make",
             model = "model",
             year = "year",
-            price = "price"
+            price = "price",
+            image = "url"
         )
 
         val searchResult = listOf(vehicleListing, vehicleListing, vehicleListing)

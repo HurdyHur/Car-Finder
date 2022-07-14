@@ -7,5 +7,6 @@ data class VehicleListing(
     val make: String,
     val model: String,
     val year: String,
-    val price: String
+    val price: String,
+    val image: String
 )
