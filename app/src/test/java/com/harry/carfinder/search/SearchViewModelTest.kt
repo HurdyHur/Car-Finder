@@ -14,6 +14,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -28,33 +29,24 @@ class SearchViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     private val searchUseCase: SearchUseCase = mockk()
-    private val viewModel = SearchViewModel(searchUseCase)
 
-    @Test
-    fun `test getMakes clears other search parameters`() {
-        populateQueryParams()
+    lateinit var viewModel: SearchViewModel
 
-        runTest {
-            viewModel.getMakes()
-        }
-
-        Assert.assertEquals(viewModel.years.value, emptyList<String>())
-        Assert.assertEquals(viewModel.models.value, emptyList<String>())
+    @Before
+    fun setUp() {
+        coEvery { searchUseCase.getMakes() } returns emptyList()
+        viewModel =  SearchViewModel(searchUseCase)
     }
 
     @Test
-    fun `test getMakes calls use case and posts results`() {
+    fun `test on ViewModel created call retrieve makes and posts results`() {
         val expectedMakes = listOf("name 1", "name 2", "name 3")
-
         coEvery { searchUseCase.getMakes() } returns expectedMakes
-
-        runTest {
-            viewModel.getMakes()
-        }
-
         coVerify { searchUseCase.getMakes() }
 
-        Assert.assertEquals(expectedMakes, viewModel.makes.value)
+        val createdViewModel = SearchViewModel(searchUseCase)
+
+        Assert.assertEquals(expectedMakes, createdViewModel.makes.value)
     }
 
     @Test
@@ -159,7 +151,6 @@ class SearchViewModelTest {
         every { searchUseCase.getYearsByModel(any()) } returns listOf("2001, 2002")
 
         runTest {
-            viewModel.getMakes()
             viewModel.onModelSelected(models.first())
             viewModel.years
         }

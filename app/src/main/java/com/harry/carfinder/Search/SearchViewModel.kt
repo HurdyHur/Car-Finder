@@ -14,10 +14,10 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
     private val makesSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val modelsSubject: MutableLiveData<List<String>> = MutableLiveData()
     private val yearsSubject: MutableLiveData<List<String>> = MutableLiveData()
-    private val searchResultSubject: MutableLiveData<SearchResultUi> = MutableLiveData()
     private val selectedMakeSubject: MutableLiveData<String> = MutableLiveData()
     private val selectedModelSubject: MutableLiveData<String> = MutableLiveData()
     private val selectedYearSubject: MutableLiveData<String> = MutableLiveData()
+    private val searchResultSubject: MutableLiveData<SearchResultUi> = MutableLiveData()
 
     val makes: LiveData<List<String>> = makesSubject
     val models: LiveData<List<String>> = modelsSubject
@@ -27,10 +27,9 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
     val selectedModel: MutableLiveData<String> = selectedModelSubject
     val selectedYear: MutableLiveData<String> = selectedYearSubject
 
-    fun getMakes() {
+
+    init {
         makesSubject.postValue(searchUseCase.getMakes())
-        modelsSubject.postValue(emptyList())
-        yearsSubject.postValue(emptyList())
     }
 
     fun onMakeSelected(make: String) {
