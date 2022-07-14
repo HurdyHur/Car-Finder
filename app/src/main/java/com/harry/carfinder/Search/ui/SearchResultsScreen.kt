@@ -45,17 +45,6 @@ fun SearchResultsList(items: List<VehicleListing>) {
     }
 }
 
-/*
-val id: String,
-val name: String,
-val title: String,
-val make: String,
-val model: String,
-val year: String,
-val price: String
-*/
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListingItem(listing: VehicleListing) {
@@ -126,9 +115,6 @@ fun ResultsPreview() {
         )
 
         val searchResult = listOf(vehicleListing, vehicleListing, vehicleListing)
-
-
-
 
         SearchResultsList(items = searchResult)
     }

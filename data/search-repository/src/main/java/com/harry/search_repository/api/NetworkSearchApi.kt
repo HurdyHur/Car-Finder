@@ -20,9 +20,9 @@ class NetworkSearchApi : SearchApi {
         return try {
             val response: String = client.get(BASE_URL) {
                 url {
-                    parameters.append("make", make)
-                    parameters.append("model", model)
-                    parameters.append("year", year)
+                    parameters.append("make", make.filterNot { it.isWhitespace() })
+                    parameters.append("model", model.filterNot { it.isWhitespace() })
+                    parameters.append("year", year.filterNot { it.isWhitespace() })
                 }
             }.body()
 

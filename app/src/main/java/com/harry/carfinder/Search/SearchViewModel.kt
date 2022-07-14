@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.harry.carfinder.Search.model.SearchResultUi
 import com.harry.search_usecase.SearchUseCase
 import com.harry.search_usecase.model.SearchResult
-import com.harry.search_usecase.model.VehicleMake
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
