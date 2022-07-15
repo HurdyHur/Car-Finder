@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import com.harry.carfinder.R
 import com.harry.carfinder.ui.theme.CarFinderTheme
+import com.harry.carfinder.ui.theme.CarFinderTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,28 +33,39 @@ fun SearchQueryScreen(
     onModelSelected: (String) -> Unit,
     onYearSelected: (String) -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {
-            Column {
-                QueryTitleView()
+    Column {
+        CarFinderTopBar()
+        Card(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {
+                Column {
+                    QueryTitleView()
 
-                SearchDropDowns(
-                    makesHintText = selectedMake.observeAsState().value,
-                    modelsHintText = selectedModel.observeAsState().value,
-                    yearsHintText = selectedYear.observeAsState().value,
-                    makes = makes.observeAsState().value,
-                    models = models.observeAsState().value,
-                    dates = dates.observeAsState().value,
-                    onMakeSelected,
-                    onModelSelected,
-                    onYearSelected
-                )
-                SearchButton { onSearch() }
+                    val makesHintText = selectedMake.observeAsState().value
+                    val modelsHintText = selectedModel.observeAsState().value
+                    val yearsHintText = selectedYear.observeAsState().value
+
+                    SearchDropDowns(
+                        makesHintText = makesHintText,
+                        modelsHintText = modelsHintText,
+                        yearsHintText = yearsHintText,
+                        makes = makes.observeAsState().value,
+                        models = models.observeAsState().value,
+                        dates = dates.observeAsState().value,
+                        onMakeSelected,
+                        onModelSelected,
+                        onYearSelected
+                    )
+
+                    val enabled =
+                        makesHintText != null && modelsHintText != null && yearsHintText != null
+
+                    SearchButton(enabled) { onSearch() }
+                }
             }
         }
     }
@@ -118,7 +130,9 @@ fun DropDownList(hintText: String, items: List<String>?, onClick: (item: String)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.offset(y = 24.dp).fillMaxSize()
+            modifier = Modifier
+                .offset(y = 24.dp)
+                .fillMaxSize()
         ) {
             items?.forEach { item ->
                 DropdownMenuItem(text = { Text(item) }, onClick = {
@@ -131,15 +145,24 @@ fun DropDownList(hintText: String, items: List<String>?, onClick: (item: String)
 }
 
 @Composable
-fun SearchButton(onClick: () -> Unit) {
+fun SearchButton(enabled: Boolean, onClick: () -> Unit) {
     val mainButtonColor = ButtonDefaults.buttonColors(
         containerColor = Color.Red,
         contentColor = Color.White
     )
 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        Button(onClick = onClick, Modifier.fillMaxWidth(0.5f), colors = mainButtonColor) {
-            Text(text = stringResource(id = R.string.search_button), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        Button(
+            enabled = enabled,
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth(0.5f),
+            colors = mainButtonColor
+        ) {
+            Text(
+                text = stringResource(id = R.string.search_button),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 }

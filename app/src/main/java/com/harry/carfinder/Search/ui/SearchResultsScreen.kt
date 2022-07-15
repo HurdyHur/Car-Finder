@@ -25,14 +25,18 @@ import coil.compose.AsyncImage
 import com.harry.carfinder.R
 import com.harry.carfinder.Search.model.SearchResultUi
 import com.harry.carfinder.ui.theme.CarFinderTheme
+import com.harry.carfinder.ui.theme.CarFinderTopBar
 import com.harry.search_usecase.model.VehicleListing
 
 @Composable
 fun SearchResultsScreen(searchResultUi: LiveData<SearchResultUi>, onRetry: () -> Unit) {
-    when (val searchResults = searchResultUi.observeAsState().value) {
-        is SearchResultUi.Success -> SearchResultsList(items = searchResults.searchResults)
-        is SearchResultUi.Failure -> FailedView(onRetry)
-        is SearchResultUi.Loading -> LoadingView()
+    Column {
+        CarFinderTopBar()
+        when (val searchResults = searchResultUi.observeAsState().value) {
+            is SearchResultUi.Success -> SearchResultsList(items = searchResults.searchResults)
+            is SearchResultUi.Failure -> FailedView(onRetry)
+            is SearchResultUi.Loading -> LoadingView()
+        }
     }
 }
 

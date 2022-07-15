@@ -5,11 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.harry.carfinder.Search.SearchViewModel
+import com.harry.carfinder.ui.theme.CarFinderTopBar
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel) {
     val navController = rememberNavController()
-
     NavHost(navController = navController, startDestination = "searchQueryScreen") {
         composable("searchQueryScreen") {
             SearchQueryScreen(
