@@ -8,6 +8,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -118,8 +119,15 @@ fun SearchDropDowns(
 @Composable
 fun DropDownList(hintText: String, items: List<String>?, onClick: (item: String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+    val defaultPadding = dimensionResource(id = R.dimen.default_padding)
 
-    Box(modifier = Modifier.padding(8.dp)) {
+    Box(
+        modifier = Modifier.padding(
+            start = defaultPadding,
+            top = defaultPadding,
+            end = defaultPadding
+        )
+    ) {
         Button(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
