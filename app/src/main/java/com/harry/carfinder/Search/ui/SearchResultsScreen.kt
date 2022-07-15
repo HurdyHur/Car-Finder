@@ -52,9 +52,10 @@ fun SearchResultsList(items: List<VehicleListing>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListingItem(listing: VehicleListing) {
+    val defaultPadding = dimensionResource(id = R.dimen.default_padding)
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(start = defaultPadding, end = defaultPadding, top = defaultPadding)
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
     ) {
