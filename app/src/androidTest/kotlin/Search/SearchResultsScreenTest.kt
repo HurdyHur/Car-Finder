@@ -25,7 +25,7 @@ class SearchResultsScreenTest {
     @Before
     fun setUp() {
         composeTestRule.setContent {
-            SearchResultsScreen(searchResultUi = results)
+            SearchResultsScreen(searchResultUi = results) {}
         }
     }
 

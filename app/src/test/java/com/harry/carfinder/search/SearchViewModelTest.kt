@@ -118,7 +118,8 @@ class SearchViewModelTest {
             make = "make",
             model = "model",
             year = "year",
-            price = "price"
+            price = "price",
+            image = "image"
         )
 
         val searchResult =
